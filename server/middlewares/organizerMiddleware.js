@@ -9,23 +9,29 @@ const isOrganizer = async (req, res, next) => {
     if(token == null){
             res.sendStatus(403)
             return 0;
-        }
-    await jwt.verify(
-        token,
-        process.env.JWT_SECRET, 
-        (err, authData) => {
-            if (err) {
-                res.sendStatus(403)
-            }})
-
-    req.user = await util.getUserByToken(req)
-    if(req.user.role == "A" || req.user.role == "O"){
-        next()
-
-    }else{
-        res.status(401)
-        .json({msg: "User is not a Event Organizer"})
     }
+    else{
+        await jwt.verify(
+            token,
+            process.env.JWT_SECRET, 
+            async (err, authData) => {
+                if (err) {
+                    res.sendStatus(403)
+                }else{
+                    req.user = await util.getUserByToken(req)
+                    if(req.user.role == "A" || req.user.role == "O"){
+                        next()
+
+                    }else{
+                        res.status(401)
+                        .json({msg: "User is not a Event Organizer"})
+                    }
+                }
+        })
+
+    }
+
+
 };
 
 export default isOrganizer;
