@@ -21,11 +21,10 @@ CREATE TABLE `Event` (
     `start_date` DATETIME(3) NOT NULL,
     `end_date` DATETIME(3) NOT NULL,
     `model` ENUM('P', 'O') NOT NULL,
-    `status` ENUM('E', 'S', 'P') NOT NULL DEFAULT 'P',
+    `status` ENUM('E', 'O', 'P') NOT NULL DEFAULT 'P',
     `matchsQuantity` INTEGER NULL,
     `keysQuantity` INTEGER NULL,
     `multiplayer` BOOLEAN NOT NULL,
-    `winnerUserId` INTEGER NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -48,7 +47,7 @@ CREATE TABLE `EventInscriptions` (
     `teamId` INTEGER NULL,
     `eventId` INTEGER NOT NULL,
     `registered_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('P', 'C', 'D') NOT NULL DEFAULT 'P',
+    `status` ENUM('O', 'L', 'W', 'R') NOT NULL DEFAULT 'O',
     `role` ENUM('O', 'P') NOT NULL DEFAULT 'P',
 
     UNIQUE INDEX `EventInscriptions_userId_eventId_key`(`userId`, `eventId`),
@@ -61,7 +60,7 @@ CREATE TABLE `TeamUsers` (
     `userId` INTEGER NOT NULL,
     `teamId` INTEGER NOT NULL,
     `inscription_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    `status` ENUM('P', 'C', 'D') NOT NULL DEFAULT 'P',
+    `status` ENUM('A', 'U') NOT NULL DEFAULT 'U',
 
     UNIQUE INDEX `TeamUsers_userId_key`(`userId`),
     PRIMARY KEY (`id`)
@@ -71,7 +70,6 @@ CREATE TABLE `TeamUsers` (
 CREATE TABLE `Match` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `eventId` INTEGER NOT NULL,
-    `matchNumber` INTEGER NOT NULL,
     `keyNumber` INTEGER NOT NULL,
     `firstTeamId` INTEGER NULL,
     `secondTeamId` INTEGER NULL,
@@ -83,9 +81,6 @@ CREATE TABLE `Match` (
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- AddForeignKey
-ALTER TABLE `Event` ADD CONSTRAINT `Event_winnerUserId_fkey` FOREIGN KEY (`winnerUserId`) REFERENCES `User`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Team` ADD CONSTRAINT `Team_ownerId_fkey` FOREIGN KEY (`ownerId`) REFERENCES `User`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
