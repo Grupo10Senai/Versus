@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import serviceUtils from '../services/util';
+import serviceUtils from '../services/util.js';
 
 class TeamModel {
   
