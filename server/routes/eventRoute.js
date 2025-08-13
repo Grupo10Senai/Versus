@@ -28,7 +28,7 @@ const eventRoute = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/Event'
  */
-eventRoute.get("/", verifyToken, async (req, res) => {
+eventRoute.get("/", async (req, res) => {
   res.json(await eventModel.getAll(req));
 });
 
