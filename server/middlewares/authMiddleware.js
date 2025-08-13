@@ -1,11 +1,15 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import util from '../services/util';
+import util from '../services/util.js';
 
 
 const verifyToken = async (req, res, next) => {
 
     const {token }= req.cookies
+    if(token == null){
+        res.sendStatus(403)
+        return 0;
+    }
 
     await jwt.verify(
         token,
